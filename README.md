@@ -12,7 +12,6 @@ Developed using the Next.js framework including React, CSS and Tailwind, as it s
 - [About the Project](#about-the-project)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [Getting Started](#getting-started)
 - [Usage](#usage)
 - [Contact](#contact)
 
