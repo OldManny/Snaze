@@ -1,9 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useMaze } from '../Maze/MazeContext';
+import { useMaze } from '../Maze/MazeContext'; 
 import MazeSVG from '../Maze/MazeSVG';
 
+// The AnimatedMaze component takes an optional prop strokeWidth with a default value of 5
 const AnimatedMaze = ({ strokeWidth = 5 }) => {
+    // Destructure the necessary functions and state from the useMaze hook
     const { generateMaze, maze, solveMaze, setStart, setEnd, start, end, solutionPath, setSolutionPath } = useMaze();
     const [animationPhase, setAnimationPhase] = useState('init');
     const [drawnPath, setDrawnPath] = useState([]);
@@ -16,16 +18,16 @@ const AnimatedMaze = ({ strokeWidth = 5 }) => {
         setIsSolved(false);
         setStart(null);
         setEnd(null);
-        generateMaze(33, 69);
-        setAnimationPhase('init');
+        generateMaze(33, 69); // Generate a new maze with specific dimensions
+        setAnimationPhase('init'); // Reset animation phase to 'init'
     };
 
-    // Generate the initial maze on component mount
+    // useEffect to generate the initial maze when the component mounts
     useEffect(() => {
         generateMaze(33, 69);
     }, [generateMaze]);
 
-    // Set random start and end points when the maze is ready
+    // useEffect to set random start and end points once the maze is ready
     useEffect(() => {
         if (maze.length > 0 && maze[0].length > 0) {
             const setRandomPoints = () => {
@@ -37,7 +39,7 @@ const AnimatedMaze = ({ strokeWidth = 5 }) => {
                     let point;
                     do {
                         point = { row: Math.floor(Math.random() * rows), col: Math.floor(Math.random() * cols) };
-                    } while (maze[point.row][point.col] !== 'P'); // Ensure point is valid (e.g., 'P' might represent a path)
+                    } while (maze[point.row][point.col] !== 'P'); // Ensure the point is a valid path
                     return point;
                 };
 
@@ -45,7 +47,7 @@ const AnimatedMaze = ({ strokeWidth = 5 }) => {
                 let end;
                 do {
                     end = getRandomPoint();
-                } while (start.row === end.row && start.col === end.col); // Ensure start and end are not the same
+                } while (start.row === end.row && start.col === end.col); // Ensure start and end points are not the same
 
                 setStart(start);
                 setEnd(end);
@@ -55,32 +57,32 @@ const AnimatedMaze = ({ strokeWidth = 5 }) => {
         }
     }, [maze, setStart, setEnd]);
 
-    // Solve the maze when start and end points are set
+    // useEffect to solve the maze once start and end points are set
     useEffect(() => {
         if (start && end && animationPhase === 'init') {
             solveMaze();
-            setAnimationPhase('drawing');
+            setAnimationPhase('drawing'); // Transition to the 'drawing' phase
         }
     }, [start, end, solveMaze, animationPhase]);
 
-    // Handle the drawing and erasing animation phases
+    // useEffect to handle the drawing and erasing animation phases
     useEffect(() => {
         if (animationPhase === 'drawing' && solutionPath.length > 0) {
             let currentIndex = 0;
             const intervalId = setInterval(() => {
-                setDrawnPath(solutionPath.slice(0, currentIndex + 1));
+                setDrawnPath(solutionPath.slice(0, currentIndex + 1)); // Incrementally draw the solution path
                 currentIndex += 1;
                 if (currentIndex === solutionPath.length) {
                     clearInterval(intervalId);
                     setIsSolved(true);
-                    setTimeout(() => setAnimationPhase('erasing'), 2000); // Pause before erasing
+                    setTimeout(() => setAnimationPhase('erasing'), 2000); // Pause before starting the erasing phase
                 }
             }, 35);
             return () => clearInterval(intervalId);
         } else if (animationPhase === 'erasing' && solutionPath.length > 0) {
             let currentIndex = 0;
             const intervalId = setInterval(() => {
-                setDrawnPath(solutionPath.slice(currentIndex));
+                setDrawnPath(solutionPath.slice(currentIndex)); // Incrementally erase the solution path
                 currentIndex += 1;
                 if (currentIndex === solutionPath.length) {
                     clearInterval(intervalId);
@@ -107,7 +109,7 @@ const AnimatedMaze = ({ strokeWidth = 5 }) => {
                 maze={maze} 
                 start={start} 
                 end={end}
-                onCellClick={null}  // Pass null or undefined
+                onCellClick={null}
             />
         </div>
     );
