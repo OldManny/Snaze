@@ -2,17 +2,13 @@
 import React, { createContext, useState, useContext, useCallback, useEffect } from 'react';
 import { bfsSolve, dijkstraSolve, aStarSolve, dfsSolve } from './mazeAlgorithms'; 
 import WindowAlert from '../WindowAlert'; 
-import MazeInfo from './MazeInfo';
+import MazeInfo from './MazeInfo'; 
 
-// Create Maze context
 const MazeContext = createContext();
 
-// Custom hook to use the Maze context
 export const useMaze = () => useContext(MazeContext);
 
-// MazeProvider component to provide maze-related state and functions to children components
 export const MazeProvider = ({ children, showModal = true }) => {
-    // State variables
     const [maze, setMaze] = useState([]);
     const [start, setStart] = useState(null);
     const [end, setEnd] = useState(null);
@@ -21,18 +17,15 @@ export const MazeProvider = ({ children, showModal = true }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [steps, setSteps] = useState(0);
 
-    // useEffect to set default algorithm if showModal is false
     useEffect(() => {
         if (!showModal) {
-            setAlgorithm('bfs'); // Default algorithm
+            setAlgorithm('bfs'); 
         }
     }, [showModal]);
 
-    // Function to generate a new maze
     const generateMaze = useCallback((rows, cols) => {
         let newMaze = Array(rows).fill(null).map(() => Array(cols).fill('W'));
 
-        // Recursive function to carve paths in the maze
         const carvePath = (x, y) => {
             const directions = [[0, -1], [1, 0], [0, 1], [-1, 0]];
             directions.sort(() => Math.random() - 0.5);
@@ -48,7 +41,6 @@ export const MazeProvider = ({ children, showModal = true }) => {
             });
         };
 
-        // Reset states before generating a new maze
         setStart(null);
         setEnd(null);
         setSolutionPath([]);
@@ -56,7 +48,6 @@ export const MazeProvider = ({ children, showModal = true }) => {
         setMaze(newMaze);
     }, []);
 
-    // Function to solve the maze using the selected algorithm
     const solveMaze = useCallback(() => {
         if (!start || !end) {
             console.error("Please select a start and an end point.");
@@ -98,7 +89,6 @@ export const MazeProvider = ({ children, showModal = true }) => {
         }
     }, [maze, start, end, algorithm, showModal]);
 
-    // Function to handle the end of the animation
     const handleAnimationEnd = () => {
         console.log("Animation ended");
         setTimeout(() => {
@@ -108,7 +98,6 @@ export const MazeProvider = ({ children, showModal = true }) => {
         }, 500); 
     };
 
-    // Provide maze-related state and functions to children components
     return (
         <MazeContext.Provider value={{
             maze, setMaze, start, setStart, end, setEnd, solutionPath, setSolutionPath, generateMaze, solveMaze, setAlgorithm, handleAnimationEnd
