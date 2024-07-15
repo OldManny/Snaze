@@ -43,7 +43,7 @@ const MazeController = () => {
         if (height < 600) rows = 15;
         else if (height < 1000) rows = 25;
         else if (height < 1200) rows = 35;
-        else rows = 39; // For very tall screens
+        else rows = 39;
 
         return { rows, cols };
     };
