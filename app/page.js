@@ -1,26 +1,29 @@
-// Import necessary modules from React and custom components
+'use client'; 
 import React from 'react';
-import AnimatedMaze from '/components/Home/AnimatedMaze'; 
-import Footer from "/components/Footer/Footer";
-import { MazeProvider } from '/components/Maze/MazeContext'; // Ensure the correct path is used
+import Navbar from '/components/Navbar/Navbar';
+import Footer from '/components/Footer/Footer';
+import AnimatedMaze from '/components/Home/AnimatedMaze';
+import TypingText from '/components/Home/TypingText';
+import { MazeProvider } from '/components/Maze/MazeContext';
 
-// Home component
 const Home = () => {
     return (
-        // Wrap the content to provide maze-related context
-        <MazeProvider>
+        // Wrapping the Home component with the MazeProvider
+        <MazeProvider showModal={false}>
+            {/* Navbar component */}
+            <Navbar />
             <div className="landing-page">
-                {/* Header section with the title */}
+                {/* Header text section */}
                 <div className="header-text">
-                    <h1 className="text-4xl font-semibold">Snaze</h1>
+                    <h1 className="text-xl md:text-4xl font-semibold mt-28">Snaze</h1>
                 </div>
-                {/* Container for the animated maze component */}
+                {/* Animated maze component */}
                 <div className="animated-maze-container">
                     <AnimatedMaze />
                 </div>
-                {/* Footer text section */}
-                <div className="footer-text">
-                    <p className="text-xl">Solve mazes and play snake using algorithms.</p>
+                {/* Animated text section */}
+                <div className="footer-text mb-28 px-4 text-center">
+                    <TypingText text="Solve mazes and play snake using algorithms." speed={10} />
                 </div>
             </div>
             {/* Footer component */}
@@ -29,5 +32,4 @@ const Home = () => {
     );
 };
 
-// Export the Home component as the default export
 export default Home;
