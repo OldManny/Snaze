@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 
-// WindowAlert component takes three props: isOpen (boolean to control the visibility), message (the alert message), and onClose (function to close the alert)
+// WindowAlert component
 const WindowAlert = ({ isOpen, message, onClose }) => {
-    const modalRef = useRef(); // Initialize the ref to keep a reference to the modal element
+    const modalRef = useRef(null); // Initialize the ref to keep a reference to the modal element
 
     // useEffect hook to handle clicks outside the modal
     useEffect(() => {
@@ -19,23 +19,28 @@ const WindowAlert = ({ isOpen, message, onClose }) => {
         return () => {
             window.removeEventListener('mousedown', handleOutsideClick); // Clean up the event listener when the component unmounts or isOpen changes
         };
-    }, [isOpen, onClose, modalRef]); // Include modalRef in the dependency array
-
-    // If the modal is not open, return null and render nothing
-    if (!isOpen) return null;
+    }, [isOpen, onClose]);
 
     // Render the modal
     return (
-        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-30 flex justify-center items-center">
-            <div ref={modalRef} className="bg-indigo-100 p-8 rounded-3xl shadow-xl">
-                <p className='text-slate-600'>{message}</p> // Display the alert message
-                <button onClick={onClose} className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-lg shadow-xl hover:bg-indigo-600">
+        <div 
+            className={`fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-30 flex justify-center items-center px-4 transition-opacity duration-500 
+            ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}> {/* Handle fade in/out transitions based on isOpen */}
+            <div 
+                ref={modalRef} 
+                className={`bg-indigo-100 p-4 sm:p-8 rounded-3xl shadow-xl max-w-full sm:max-w-4xl mx-auto transform transition-transform duration-500 
+                ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}> {/* Handle slide up/down transitions based on isOpen */}
+                <div 
+                    className='text-slate-600 text-sm sm:text-base py-4' 
+                    dangerouslySetInnerHTML={{ __html: message }} /> {/* Render the alert message with potential HTML content */}
+                <button 
+                    onClick={onClose} 
+                    className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-lg shadow-xl hover:bg-indigo-600"> {/* Button to close the modal */}
                     Close
                 </button>
             </div>
         </div>
     );
 };
-
 
 export default WindowAlert;
