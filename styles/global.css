@@ -1,0 +1,124 @@
+/* Importing Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&family=Roboto&family=Ubuntu&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+/* Tailwind base, components, and utilities import */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**************** General CSS ****************/
+
+/* Global styling for html and body */
+html, body {
+    font-family: 'Poppins', sans-serif; /* Default font to Poppins */
+    min-height: 100%; /* Body takes at least full viewport height */
+    margin: 0; /* Removes default margin */
+    /* Applies a linear gradient as the background */
+    background: -moz-linear-gradient(90deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+}
+
+/*********************** Header & footer ***********************/
+
+/* Dropdown menu positioning and z-index to ensure it's on top */
+.dropdown-menu {
+    position: relative; /* Relative positioning */
+    z-index: 1000; /* High z-index value to ensure dropdown stays above other elements */
+}
+
+/* Styling for header */
+.header {
+    background-color: #1b263b; /* Dark background color for header */
+    color: #edede9; /* Light text color for contrast */
+}
+
+/* Styling for footer */
+.footer {
+    background-color: #1b263b; /* Same background color as header */
+    color: #edede9; /* Light text color */
+    margin-top: 0rem; /* Removes margin at the top */
+    /* Commented out shadow effects */
+    /* box-shadow: 0 1px 20px 3px #4a4e69, 0 -10px 20px 20px rgba(0, 0, 0, 0.1); */
+}
+
+/* Styling for a special icon using the 'Great Vibes' font */
+.s-icon {
+    font-family: 'Great Vibes', cursive; /* Cursive style font */
+    font-size: 28px; /* Adjust font size */
+    font-weight: 600; /* Semi-bold font weight */
+    color: currentColor; /* Inherits color from parent */
+}
+
+/************************ Maze Styling ************************/
+
+/* Maze cell transition effect */
+.maze-cell {
+    transition: all 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Maze container transition effects for width and height */
+.maze-container {
+    transition: width 0.3s ease-in-out, height 0.3s ease-in-out; /* Smooth resizing transitions */
+}
+
+/* Blinking animation keyframes */
+@keyframes blink {
+    0%, 100% {
+        opacity: 1; /* Fully visible at the start and end */
+    }
+    50% {
+        opacity: 0; /* Invisible at the middle */
+    }
+}
+
+/* Applying the blink animation for path elements */
+.blinking-path {
+    animation: blink 0.5s ease-in-out 2; /* Runs the blink animation twice */
+}
+
+/***************** Home Styling *****************/
+
+/* Styling for the landing page layout */
+.landing-page {
+    display: flex;
+    flex-direction: column; /* Column layout */
+    align-items: center; /* Centers elements horizontally */
+    justify-content: space-between; /* Distributes space between elements */
+    flex-grow: 1; /* Allows the page to grow to fill the available space */
+}
+
+/* Container for the animated maze with centered content */
+
+.animated-maze-container {
+    flex-grow: 1; /* Allows it to grow to fill the space */
+    display: flex; /* Flex layout */
+    align-items: center; /* Centered content vertically */
+    justify-content: center; /* Centered content horizontally */
+}
+
+/* Header text styling */
+.header-text {
+    margin-bottom: auto; /* Automatically add margin at the bottom */
+    text-align: center; /* Center text alignment */
+}
+
+/* Footer text styling */
+.footer-text {
+    margin-top: auto; /* Automatically add margin at the top */
+    text-align: center; /* Center text alignment */
+}
+
+/* Typing text styling for animation effect */
+.typing-text {
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden; /* Hides overflowed text */
+    display: inline-block; /* Displays the text inline */
+    text-align: left; /* Aligns text to the left */
+}
+
+/***************** Snake Styling *****************/
+
+/* Styling for SVG elements */
+svg {
+    border-radius: 15px; /* Rounded corners for the SVG */
+}
