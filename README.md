@@ -1,6 +1,6 @@
 # Maze Solver and Algorithm Visualizer
 
-(images/HomePage.png)
+![Home Page](images/HomePage.png)
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -30,7 +30,7 @@ This React-based web application is an interactive platform for visualizing maze
 - User-selectable start and end points
 - AI-powered snake game with performance enhancements
 
-(images/MazeSolved.png)
+![Maze Solved](images/MazeSolved.png)
 
 
 ## Technologies Used
@@ -79,18 +79,18 @@ This React-based web application is an interactive platform for visualizing maze
 
 Each algorithm's execution is visualized step-by-step, allowing users to understand the process. Useful informations are provided in a modal, upon maze completion.
 
-(images/MazeSolutionExplained.png)
+![A solution of a maze, explained](images/MazeSolutionExplained.png)
 
 ## Snake Game
 
 The application includes a fully autonomous, AI snake game that uses a combination of advanced techniques to navigate efficiently:
 
-- **A* Pathfinding Algorithm**: Determines the shortest and safest path to the food.
+- **A★ Pathfinding Algorithm**: Determines the shortest and safest path to the food.
 - **Grid System**: Enables precise movement and collision detection.
 - **Heuristic Function**: Estimates the cost of reaching the food, aiding in optimal path selection.
 - **Flood Fill Algorithm**: Assesses available space to avoid collisions with the snake's body.
 - **Optimized Move Selection**: Utilizes techniques like lookahead, escape moves, and backtracking for best possible moves.
 
-(images/Snake.png)
+![Snake Game](images/Snake.png)
 
 This implementation showcases how pathfinding algorithms can be applied to create intelligent game behavior.
