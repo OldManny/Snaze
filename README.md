@@ -35,8 +35,10 @@ This React-based web application is an interactive platform for visualizing maze
 
 ## Technologies Used
 
-- React
-- Node
+- Next.js
+- React.js
+- Node.js
+- Tailwind
 - CSS
 
 ## Installation
