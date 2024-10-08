@@ -74,7 +74,7 @@ This React-based web application is an interactive platform for visualizing maze
 ### Maze Solving
 1. **Breadth-First Search (BFS)**: Explores all neighbor nodes at the present depth before moving to nodes at the next depth level.
 2. **Depth-First Search (DFS)**: Explores as far as possible along each branch before backtracking.
-3. **A* Search**: Uses heuristics to find the most promising path, balancing the cost of the path so far and the estimated cost to the goal.
+3. **A\* Search**: Uses heuristics to find the most promising path, balancing the cost of the path so far and the estimated cost to the goal.
 4. **Dijkstra's Algorithm**: Finds the shortest path between nodes in a graph, which translates well to maze solving.
 
 Each algorithm's execution is visualized step-by-step, allowing users to understand the process. Useful informations are provided in a modal, upon maze completion.
@@ -85,7 +85,7 @@ Each algorithm's execution is visualized step-by-step, allowing users to underst
 
 The application includes a fully autonomous, AI snake game that uses a combination of advanced techniques to navigate efficiently:
 
-- **A★ Pathfinding Algorithm**: Determines the shortest and safest path to the food.
+- **A\* Pathfinding Algorithm**: Determines the shortest and safest path to the food.
 - **Grid System**: Enables precise movement and collision detection.
 - **Heuristic Function**: Estimates the cost of reaching the food, aiding in optimal path selection.
 - **Flood Fill Algorithm**: Assesses available space to avoid collisions with the snake's body.
