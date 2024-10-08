@@ -20,6 +20,7 @@ export const MazeProvider = ({ children, showModal = true }) => {
     const [algorithm, setAlgorithm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [steps, setSteps] = useState(0);
+    const [modalManuallyClosed, setModalManuallyClosed] = useState(false); // State to track manual modal closure
 
     // useEffect to set default algorithm if showModal is false
     useEffect(() => {
@@ -68,8 +69,6 @@ export const MazeProvider = ({ children, showModal = true }) => {
             return;
         }
 
-        console.log(`Solving maze using: ${algorithm}`); 
-
         let path = [];
         switch (algorithm) {
             case 'bfs':
@@ -94,7 +93,7 @@ export const MazeProvider = ({ children, showModal = true }) => {
         if (path.length === 0) {
             console.error("No solution found.");
         } else {
-            console.log(`Solution path (${path.length} steps):`, path); 
+            setModalManuallyClosed(false); // Reset manual close flag when solving; 
         }
     }, [maze, start, end, algorithm, showModal]);
 
@@ -102,10 +101,10 @@ export const MazeProvider = ({ children, showModal = true }) => {
     const handleAnimationEnd = () => {
         console.log("Animation ended");
         setTimeout(() => {
-            if (showModal) {
+            if (showModal && !modalManuallyClosed) { // Check if the modal was manually closed
                 setIsModalOpen(true);
             }
-        }, 500); 
+        }, 1000);
     };
 
     // Provide maze-related state and functions to children components
@@ -126,7 +125,10 @@ export const MazeProvider = ({ children, showModal = true }) => {
                     isOpen={isModalOpen && !!solutionPath.length}
                     steps={steps}
                     algorithm={algorithm}
-                    onClose={() => setIsModalOpen(false)}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        setModalManuallyClosed(true); // Mark modal as manually closed
+                    }}
                 />
             )}
         </MazeContext.Provider>
