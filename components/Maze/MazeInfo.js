@@ -1,134 +1,107 @@
-'use client';
-import React, { createContext, useState, useContext, useCallback, useEffect } from 'react';
-import { bfsSolve, dijkstraSolve, aStarSolve, dfsSolve } from './mazeAlgorithms'; 
-import WindowAlert from '../WindowAlert'; 
-import MazeInfo from './MazeInfo';
+import React, { useEffect, useRef } from 'react';
 
-// Create Maze context
-const MazeContext = createContext();
+// MazeInfo component displays modal information about the current maze algorithm and steps
+const MazeInfo = ({ isOpen, onClose, steps, algorithm }) => {
+    const modalRef = useRef(null); // Ref to detect clicks outside the modal
 
-// Custom hook to use the Maze context
-export const useMaze = () => useContext(MazeContext);
-
-// MazeProvider component to provide maze-related state and functions to children components
-export const MazeProvider = ({ children, showModal = true }) => {
-    // State variables
-    const [maze, setMaze] = useState([]);
-    const [start, setStart] = useState(null);
-    const [end, setEnd] = useState(null);
-    const [solutionPath, setSolutionPath] = useState([]);
-    const [algorithm, setAlgorithm] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [steps, setSteps] = useState(0);
-
-    // useEffect to set default algorithm if showModal is false
-    useEffect(() => {
-        if (!showModal) {
-            setAlgorithm('bfs'); // Default algorithm
-        }
-    }, [showModal]);
-
-    // Function to generate a new maze
-    const generateMaze = useCallback((rows, cols) => {
-        let newMaze = Array(rows).fill(null).map(() => Array(cols).fill('W'));
-
-        // Recursive function to carve paths in the maze
-        const carvePath = (x, y) => {
-            const directions = [[0, -1], [1, 0], [0, 1], [-1, 0]];
-            directions.sort(() => Math.random() - 0.5);
-
-            newMaze[y][x] = 'P';
-
-            directions.forEach(([dx, dy]) => {
-                const nx = x + dx * 2, ny = y + dy * 2;
-                if (ny >= 0 && ny < rows && nx >= 0 && nx < cols && newMaze[ny][nx] === 'W') {
-                    newMaze[y + dy][x + dx] = 'P';
-                    carvePath(nx, ny);
-                }
-            });
-        };
-
-        // Reset states before generating a new maze
-        setStart(null);
-        setEnd(null);
-        setSolutionPath([]);
-        carvePath(1, 1);
-        setMaze(newMaze);
-    }, []);
-
-    // Function to solve the maze using the selected algorithm
-    const solveMaze = useCallback(() => {
-        if (!start || !end) {
-            console.error("Please select a start and an end point.");
-            return;
-        }
-
-        if (!algorithm) {
-            if (showModal) setIsModalOpen(true);
-            return;
-        }
-
-        console.log(`Solving maze using: ${algorithm}`); 
-
-        let path = [];
-        switch (algorithm) {
+    // Helper function to format algorithm names for display
+    const formatAlgorithmName = (algo) => {
+        switch (algo) {
             case 'bfs':
-                path = bfsSolve(maze, start, end);
-                break;
-            case 'dijkstra':
-                path = dijkstraSolve(maze, start, end);
-                break;
-            case 'astar':
-                path = aStarSolve(maze, start, end);
-                break;
+                return 'BFS'; // Breadth-First Search
             case 'dfs':
-                path = dfsSolve(maze, start, end);
-                break;
+                return 'DFS'; // Depth-First Search
+            case 'dijkstra':
+                return 'Dijkstra'; // Dijkstra's Algorithm
+            case 'astar':
+                return 'A*'; // A* Algorithm
             default:
-                console.error("Unknown algorithm");
+                return algo; // Fallback for unknown algorithms
         }
-
-        setSolutionPath(path);
-        setSteps(path.length); 
-
-        if (path.length === 0) {
-            console.error("No solution found.");
-        } else {
-            console.log(`Solution path (${path.length} steps):`, path); 
-        }
-    }, [maze, start, end, algorithm, showModal]);
-
-    // Function to handle the end of the animation
-    const handleAnimationEnd = () => {
-        console.log("Animation ended");
-        setTimeout(() => {
-            if (showModal) {
-                setIsModalOpen(true);
-            }
-        }, 500); 
     };
 
-    // Provide maze-related state and functions to children components
+    // Function to return a description of the selected algorithm
+    const getAlgorithmDescription = (algorithm) => {
+        switch (algorithm) {
+            case 'bfs':
+                return "Explores all nodes at the present depth level before moving on to nodes at the next depth one.";
+            case 'dfs':
+                return "Explores as far as possible along each branch before backtracking.";
+            case 'dijkstra':
+                return "Finds the shortest path between nodes in a weighted graph.";
+            case 'astar':
+                return "This algorithm is an extension of Dijkstra's algorithm which uses heuristics to improve its performance.";
+            default:
+                return "Unknown algorithm."; // Fallback description
+        }
+    };
+
+    // Function to return comparative analysis of the algorithm's performance
+    const getComparativeAnalysis = (algo) => {
+        switch (algo) {
+            case 'bfs':
+                return "BFS is efficient for finding the shortest path in unweighted graphs but can be slow on large graphs.";
+            case 'dfs':
+                return "DFS is less efficient for finding shortest paths but is useful for pathfinding in deep graphs.";
+            case 'dijkstra':
+                return "Dijkstra is efficient, but A* can be faster with heuristics.";
+            case 'astar':
+                return "A* is typically faster than Dijkstra due to its heuristic but requires more memory.";
+            default:
+                return ""; // No comparative analysis available for unknown algorithms
+        }
+    };
+
+    // Function to return real-world applications of the selected algorithm
+    const getRealLifeApplications = (algorithm) => {
+        switch (algorithm) {
+            case 'bfs':
+                return "Is used in social networking sites, GPS navigation systems, and web crawlers.";
+            case 'dfs':
+                return "Is used in scheduling, solving puzzles, and exploring mazes.";
+            case 'dijkstra':
+                return "Is used in network routing protocols, geographical maps, and robotics.";
+            case 'astar':
+                return "Is used in video games, pathfinding in maps, and artificial intelligence.";
+            default:
+                return "Unknown algorithm."; // Fallback for unknown algorithms
+        }
+    };
+
+    // Effect to handle closing the modal if a click is detected outside the modal
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                onClose(); // Close modal if click is outside
+            }
+        };
+
+        if (isOpen) {
+            window.addEventListener('mousedown', handleOutsideClick); // Add event listener when modal is open
+        }
+
+        return () => {
+            window.removeEventListener('mousedown', handleOutsideClick); // Cleanup when modal closes
+        };
+    }, [isOpen, onClose]);
+
+    // JSX structure of the modal
     return (
-        <MazeContext.Provider value={{
-            maze, setMaze, start, setStart, end, setEnd, solutionPath, setSolutionPath, generateMaze, solveMaze, setAlgorithm, handleAnimationEnd
-        }}>
-            {children}
-            {showModal && (
-                <WindowAlert 
-                    isOpen={isModalOpen && !solutionPath.length} 
-                    message="Please choose an algorithm to solve the maze." 
-                    onClose={() => setIsModalOpen(false)} 
-                />
-            )}
-            {showModal && (
-                <MazeInfo
-                    isOpen={isModalOpen && !!solutionPath.length}
-                    steps={steps}
-                    algorithm={algorithm}
-                    onClose={() => setIsModalOpen(false)}
-                />
-            )}
-        </MazeContext.Provider>
+        <div className={`fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-30 flex justify-center items-center px-4 transition-opacity duration-500 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}> {/* Modal background */}
+            <div ref={modalRef} className={`bg-indigo-100 p-4 sm:p-8 rounded-3xl shadow-xl max-w-full sm:max-w-4xl mx-auto transform transition-transform duration-500 ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}> {/* Modal content */}
+                <div className="text-slate-600 text-sm sm:text-base py-4"> {/* Text content inside modal */}
+                    <p><strong>Algorithm:</strong> {formatAlgorithmName(algorithm)}</p>
+                    <p><strong>Steps:</strong> {steps}</p>
+                    <p><strong>Description:</strong> {getAlgorithmDescription(algorithm)}</p>
+                    <p><strong>Analysis:</strong> {getComparativeAnalysis(algorithm)}</p>
+                    <p><strong>Real-Life Applications:</strong> {getRealLifeApplications(algorithm)}</p>
+                </div>
+                <button onClick={onClose} className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-lg shadow-xl hover:bg-indigo-600"> {/* Close button */}
+                    Close
+                </button>
+            </div>
+        </div>
     );
-}
+};
+
+export default MazeInfo;
