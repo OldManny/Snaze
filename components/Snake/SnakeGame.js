@@ -55,27 +55,27 @@ const SnakeGame = () => {
                 setCurrentFoodSize(initialFoodSize / 2);
             } else if (width < 930) {
                 canvasWidth = 720;
-                canvasHeight = 540;
+                canvasHeight = 400;
                 setCurrentStrokeWidth(initialSnakeStrokeWidth);
                 setCurrentFoodSize(initialFoodSize);
             } else if (width < 1024) {
                 canvasWidth = 840;
-                canvasHeight = 500;
+                canvasHeight = 400;
                 setCurrentStrokeWidth(initialSnakeStrokeWidth);
                 setCurrentFoodSize(initialFoodSize);
-            } else if (width < 1250) {
+            } else if (width < 1625) {
                 canvasWidth = 1025;
-                canvasHeight = 560;
+                canvasHeight = 300;
                 setCurrentStrokeWidth(initialSnakeStrokeWidth);
                 setCurrentFoodSize(initialFoodSize);
-            } else if (width < 1540) {
-                canvasWidth = 1125;
-                canvasHeight = 700;
-                setCurrentStrokeWidth(initialSnakeStrokeWidth);
-                setCurrentFoodSize(initialFoodSize);
+            // } else if (width > 1725) {
+            //     canvasWidth = 1125;
+            //     canvasHeight = 500;
+            //     setCurrentStrokeWidth(initialSnakeStrokeWidth);
+            //     setCurrentFoodSize(initialFoodSize);
             } else {
                 canvasWidth = 1200;
-                canvasHeight = 700;
+                canvasHeight = 540;
                 setCurrentStrokeWidth(initialSnakeStrokeWidth);
                 setCurrentFoodSize(initialFoodSize);
             }
