@@ -61,7 +61,7 @@ This React-based web application is an interactive platform for visualizing maze
 - [Website](https://snaze.vercel.app/)
 
 
-## Maze Generation and Solving
+##
 
 1. **Maze Generation:** Click "New Maze" to create a random maze using the Recursive Backtracking algorithm.
 2. **Start and End Points:** Click on the maze grid to set the start point (first click) and end point (second click).
