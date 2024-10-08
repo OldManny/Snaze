@@ -1,4 +1,4 @@
-# Maze Solver and Algorithm Visualizer
+# Snaze
 
 ![Home Page](images/HomePage.png)
 
