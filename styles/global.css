@@ -15,10 +15,11 @@ html, body {
     min-height: 100%; /* Body takes at least full viewport height */
     margin: 0; /* Removes default margin */
     /* Applies a linear gradient as the background */
-    background: -moz-linear-gradient(90deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+    background: linear-gradient(90deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-/*********************** Header & footer ***********************/
+/*********************** Header & Footer ***********************/
 
 /* Dropdown menu positioning and z-index to ensure it's on top */
 .dropdown-menu {
@@ -36,9 +37,12 @@ html, body {
 .footer {
     background-color: #1b263b; /* Same background color as header */
     color: #edede9; /* Light text color */
-    margin-top: 0rem; /* Removes margin at the top */
-    /* Commented out shadow effects */
-    /* box-shadow: 0 1px 20px 3px #4a4e69, 0 -10px 20px 20px rgba(0, 0, 0, 0.1); */
+    width: 100%; /* Full width of the screen */
+    position: fixed; /* Fix the position at the bottom */
+    bottom: 0; /* Align to the bottom */
+    left: 0; /* Align to the left */
+    padding: 1rem 0; /* Padding for some spacing */
+    z-index: 1000; /* Ensure the footer stays on top */
 }
 
 /* Styling for a special icon using the 'Great Vibes' font */
@@ -83,12 +87,11 @@ html, body {
     display: flex;
     flex-direction: column; /* Column layout */
     align-items: center; /* Centers elements horizontally */
-    justify-content: space-between; /* Distributes space between elements */
+    justify-content: center; /* Centers elements vertically */
     flex-grow: 1; /* Allows the page to grow to fill the available space */
 }
 
 /* Container for the animated maze with centered content */
-
 .animated-maze-container {
     flex-grow: 1; /* Allows it to grow to fill the available space */
     display: flex; /* Flex layout */
@@ -98,13 +101,11 @@ html, body {
 
 /* Header text styling */
 .header-text {
-    margin-bottom: auto; /* Automatically add margin at the bottom */
     text-align: center; /* Center text alignment */
 }
 
 /* Footer text styling */
 .footer-text {
-    margin-top: auto; /* Automatically add margin at the top */
     text-align: center; /* Center text alignment */
 }
 
@@ -121,4 +122,12 @@ html, body {
 /* Styling for SVG elements */
 svg {
     border-radius: 15px; /* Rounded corners for the SVG */
+    max-width: 100%; /* Prevent SVG from exceeding container width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Containers styling */
+svg, .maze-container, .snake-container {
+    max-width: 100%; /* Prevents exceeding container width */
+    height: auto; /* Maintain aspect ratio */
 }

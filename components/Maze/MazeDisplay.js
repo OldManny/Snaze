@@ -3,77 +3,82 @@ import { useMaze } from './MazeContext';
 import MazeSVG from './MazeSVG';
 
 // MazeDisplay component to display the maze and its solution
-const MazeDisplay = ({ onCellClick, strokeWidth = 8, onAnimationEnd }) => {
-    // Destructure maze-related state and functions from the maze context
+const MazeDisplay = ({ onCellClick, strokeWidth = 8, onAnimationEnd, cellSize = 15 }) => { // Default props for strokeWidth and cellSize
+    // Destructuring maze-related state and functions from the context
     const { maze, solutionPath, generateMaze, start, end } = useMaze();
-    const cellSize = 15; // Set the size of each cell in the maze
-    const [drawnPath, setDrawnPath] = useState([]); // State to track the currently drawn path
-    const [currentMaze, setCurrentMaze] = useState([]); // State to track the current maze for rendering
-    const [isSolved, setIsSolved] = useState(false); // State to track whether the maze is solved
 
-    // Generate the initial maze on component mount
+    // State to store the drawn path, current maze, and whether the maze is solved
+    const [drawnPath, setDrawnPath] = useState([]); 
+    const [currentMaze, setCurrentMaze] = useState([]);
+    const [isSolved, setIsSolved] = useState(false);
+
+    // Effect to generate the maze with initial dimensions and cell size
     useEffect(() => {
-        generateMaze(33, 69); // Generate a maze with 33 rows and 69 columns
-    }, [generateMaze]);
+        generateMaze(23, 15, cellSize);
+    }, [generateMaze, cellSize]);
 
-    // Smooth transition effect for displaying the maze
+    // Effect to update the current maze state with a delay
     useEffect(() => {
         if (maze.length > 0) {
             const timeoutId = setTimeout(() => {
-                setCurrentMaze(maze);
-            }, 300); // Delay to create a smooth transition
-            return () => clearTimeout(timeoutId); // Cleanup timeout on unmount
+                setCurrentMaze(maze); // Set the current maze after a delay
+            }, 300);
+            return () => clearTimeout(timeoutId); // Clear the timeout when the component unmounts or maze changes
         }
     }, [maze]);
 
-    // Smooth transition effect for displaying the solution path
+    // Effect to handle the drawing of the solution path
     useEffect(() => {
+        // If no solution path exists, reset the drawn path and solved state
         if (solutionPath.length === 0) {
             setDrawnPath([]);
             setIsSolved(false);
             return;
         }
+        
+        // If solutionPath exists, draw it incrementally
         if (solutionPath.length > 0) {
             const intervalId = setInterval(() => {
                 setDrawnPath(currentPath => {
-                    const nextIndex = currentPath.length;
+                    const nextIndex = currentPath.length; // Get the next index in the solution path
                     if (nextIndex < solutionPath.length) {
-                        return [...currentPath, solutionPath[nextIndex]];
+                        return [...currentPath, solutionPath[nextIndex]]; // Add the next step to the drawn path
                     } else {
-                        clearInterval(intervalId);
-                        setIsSolved(true); // Set isSolved to true when the path is fully drawn
+                        clearInterval(intervalId); // Clear interval when the entire path is drawn
+                        setIsSolved(true); // Mark the maze as solved
                         if (onAnimationEnd) {
-                            onAnimationEnd(); // Call onAnimationEnd callback if provided
+                            onAnimationEnd(); // Call the onAnimationEnd callback
                         }
-                        return currentPath;
+                        return currentPath; // Return the complete path
                     }
                 });
-            }, 35); // Interval for drawing the path smoothly
-            return () => clearInterval(intervalId); // Cleanup interval on unmount
+            }, 35); // Draw each step with a 35ms delay
+            return () => clearInterval(intervalId); // Cleanup interval on component unmount or path change
         }
     }, [solutionPath, onAnimationEnd]);
 
-    // Display a loading message if the maze is not ready
+    // If the current maze is not available, display a loading message
     if (!currentMaze || currentMaze.length === 0 || !currentMaze[0]) {
         return <div>Loading maze...</div>;
     }
 
-    // Render the MazeSVG component with necessary props
+    // Render the MazeSVG component to display the maze
     return (
-        <div className="maze-container">
+        <div className="w-full h-full flex justify-center items-center"> {/* Center the maze in the container */}
             <MazeSVG 
                 drawnPath={drawnPath} 
                 cellSize={cellSize} 
-                strokeWidth={strokeWidth} 
+                strokeWidth={strokeWidth}
                 onCellClick={onCellClick} 
-                maze={currentMaze}
-                start={start}
+                maze={currentMaze} 
+                start={start} 
                 end={end}
-                isSolved={isSolved}
-                onAnimationEnd={onAnimationEnd} // Pass the onAnimationEnd prop
+                isSolved={isSolved} 
+                onAnimationEnd={onAnimationEnd} 
             />
         </div>
     );
 };
 
 export default MazeDisplay;
+

@@ -1,5 +1,3 @@
-'use client';
-
 // SVGRenderer component to render the snake and food in the game
 const SVGRenderer = ({ snake, food, width, height, cellColor, snakeStrokeWidth, foodSize }) => {
     // Calculate the cell size based on the width and height of the SVG container
@@ -25,13 +23,24 @@ const SVGRenderer = ({ snake, food, width, height, cellColor, snakeStrokeWidth, 
         );
     };
 
+    // Calculate total width and height based on maze dimensions and cell size
+    const totalWidth = 34 * cellSize;
+    const totalHeight = 20 * cellSize;
+
     // Render the SVG element containing the snake and the food
     return (
-        <svg width={width} height={height} style={{ backgroundColor: cellColor }}>
-            {renderSnake()} {/* Call the renderSnake function to draw the snake */}
-            {/* Draw the food as a circle */}
-            <circle cx={food.x * cellSize + cellSize / 2} cy={food.y * cellSize + cellSize / 2} r={foodSize / 2} fill="red" />
-        </svg>
+        <div className="w-full h-full">
+            <svg
+                viewBox={`0 0 ${totalWidth} ${totalHeight}`}
+                className="w-full h-auto"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ backgroundColor: cellColor }}
+            >
+                {renderSnake()} {/* Call the renderSnake function to draw the snake */}
+                {/* Draw the food as a circle */}
+                <circle cx={food.x * cellSize + cellSize / 2} cy={food.y * cellSize + cellSize / 2} r={foodSize / 2} fill="red" />
+            </svg>
+        </div>
     );
 };
 

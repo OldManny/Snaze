@@ -4,7 +4,7 @@ import SVGRenderer from './SVGRenderer';
 import SnakeAlgorithm from './SnakeAlgorithm'; 
 import WindowAlert from '../WindowAlert'; 
 import Button from '../Button';
-import { FaForward, FaBackward } from 'react-icons/fa'; 
+import { FaAngleDoubleRight, FaAngleDoubleLeft } from 'react-icons/fa'; 
 
 // Debounce function to limit the rate of function calls
 function debounce(fn, ms) {
@@ -45,39 +45,44 @@ const SnakeGame = () => {
             const width = window.innerWidth;
             const height = window.innerHeight;
 
-            let canvasWidth, canvasHeight;
+            let canvasWidth, canvasHeight, strokeWidth, foodSize;
 
             // Define canvas size based on screen width
-            if (width < 720) {
+            if (width < 360) { // Extra small devices
+                canvasWidth = 200;
+                canvasHeight = 150;
+                strokeWidth = initialSnakeStrokeWidth / 2;
+                foodSize = initialFoodSize / 2;
+            }
+            else if (width < 720) {
                 canvasWidth = 350;
                 canvasHeight = 250;
-                setCurrentStrokeWidth(initialSnakeStrokeWidth / 2);
-                setCurrentFoodSize(initialFoodSize / 2);
-            } else if (width < 930) {
+                strokeWidth = initialSnakeStrokeWidth / 1.5;
+                foodSize = initialFoodSize / 1.5;
+            }
+            else if (width < 930) {
                 canvasWidth = 720;
                 canvasHeight = 400;
-                setCurrentStrokeWidth(initialSnakeStrokeWidth);
-                setCurrentFoodSize(initialFoodSize);
-            } else if (width < 1024) {
+                strokeWidth = initialSnakeStrokeWidth;
+                foodSize = initialFoodSize;
+            }
+            else if (width < 1024) {
                 canvasWidth = 840;
                 canvasHeight = 400;
-                setCurrentStrokeWidth(initialSnakeStrokeWidth);
-                setCurrentFoodSize(initialFoodSize);
-            } else if (width < 1625) {
+                strokeWidth = initialSnakeStrokeWidth;
+                foodSize = initialFoodSize;
+            }
+            else if (width < 1625) {
                 canvasWidth = 1025;
                 canvasHeight = 300;
-                setCurrentStrokeWidth(initialSnakeStrokeWidth);
-                setCurrentFoodSize(initialFoodSize);
-            // } else if (width > 1725) {
-            //     canvasWidth = 1125;
-            //     canvasHeight = 500;
-            //     setCurrentStrokeWidth(initialSnakeStrokeWidth);
-            //     setCurrentFoodSize(initialFoodSize);
-            } else {
+                strokeWidth = initialSnakeStrokeWidth;
+                foodSize = initialFoodSize;
+            }
+            else {
                 canvasWidth = 1200;
                 canvasHeight = 540;
-                setCurrentStrokeWidth(initialSnakeStrokeWidth);
-                setCurrentFoodSize(initialFoodSize);
+                strokeWidth = initialSnakeStrokeWidth;
+                foodSize = initialFoodSize;
             }
 
             // Adjust height to ensure it fits within the available viewport height
@@ -86,6 +91,8 @@ const SnakeGame = () => {
             }
 
             setCanvasSize({ width: canvasWidth, height: canvasHeight });
+            setCurrentStrokeWidth(strokeWidth);
+            setCurrentFoodSize(foodSize);
         };
 
         const debouncedHandleResize = debounce(updateCanvasSize, 100);
@@ -214,53 +221,60 @@ const SnakeGame = () => {
 
     // Render the SnakeGame component
     return (
-        <div className="flex flex-col items-center">
-            <SVGRenderer
-                snake={snake}
-                food={food}
-                width={canvasSize.width}
-                height={canvasSize.height}
-                cellColor={cellColor}
-                snakeStrokeWidth={currentStrokeWidth}
-                foodSize={currentFoodSize}
-            />
-            <WindowAlert
-                isOpen={isModalOpen}
-                message={modalMessage}
-                onClose={() => setIsModalOpen(false)}
-            />
-            <div className="flex justify-between w-full px-4 mt-16 pb-5">
+        <div className="flex flex-col items-center justify-center w-full h-full p-4">
+            {/* Snake Game SVG */}
+            <div className="flex-grow w-full flex justify-center items-center mb-4">
+                <SVGRenderer
+                    snake={snake}
+                    food={food}
+                    width={canvasSize.width}
+                    height={canvasSize.height}
+                    cellColor={cellColor}
+                    snakeStrokeWidth={currentStrokeWidth}
+                    foodSize={currentFoodSize}
+                />
+            </div>
+
+            {/* Buttons Container */}
+            <div className="flex justify-between w-full pt-4 space-x-4">
                 <Button
                     text={
                         <div className="flex items-center justify-center">
                             {speedLabel === 'Faster' ? (
                                 <>
-                                    <FaForward className="mr-3 pl-3" style={{ fontSize: '1.5em' }} />
+                                    <FaAngleDoubleRight className="mr-2" />
                                     Faster
                                 </>
                             ) : speedLabel === 'Fastest' ? (
                                 <>
-                                    <FaForward className="mr-3 pl-3" style={{ fontSize: '1.5em' }} />
+                                    <FaAngleDoubleRight className="mr-2" />
                                     Fastest
                                 </>
                             ) : (
                                 <>
-                                    <FaBackward className="pr-3" style={{ fontSize: '1.5em' }} />
+                                    <FaAngleDoubleLeft className="mr-2" />
                                     Normal
                                 </>
                             )}
                         </div>
                     }
                     onClick={handleSpeedChange}
-                    className="bg-cyan-700 shadow-lg shadow-cyan-100/50 rounded-2xl hover:bg-cyan-800"
+                    className="bg-cyan-700 shadow-lg shadow-cyan-100/50 rounded-2xl hover:bg-cyan-800 px-4 py-2 flex-1 max-w-xs"
                 />
 
                 <Button
                     text="New Game"
                     onClick={handleNewGame}
-                    className="bg-slate-700 shadow-lg shadow-slate-400/50 rounded-2xl hover:bg-slate-900"
+                    className="bg-slate-700 shadow-lg shadow-slate-400/50 rounded-2xl hover:bg-slate-900 px-4 py-2 flex-1 max-w-xs"
                 />
             </div>
+
+            {/* Modal Alert */}
+            <WindowAlert
+                isOpen={isModalOpen}
+                message={modalMessage}
+                onClose={() => setIsModalOpen(false)}
+            />
         </div>
     );
 };

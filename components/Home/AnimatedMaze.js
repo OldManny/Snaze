@@ -133,7 +133,7 @@ const AnimatedMaze = ({ strokeWidth = 5 }) => {
 
     // Render the MazeSVG component
     return (
-        <div>
+        <div className="w-full h-full">
             <MazeSVG 
                 drawnPath={drawnPath} 
                 cellSize={10} 
