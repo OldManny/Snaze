@@ -75,8 +75,8 @@ const SnakeGame = () => {
             else if (width < 1625) {
                 canvasWidth = 1025;
                 canvasHeight = 300;
-                strokeWidth = initialSnakeStrokeWidth;
-                foodSize = initialFoodSize;
+                strokeWidth = initialSnakeStrokeWidth / 1.5;
+                foodSize = initialFoodSize / 1.5;
             }
             else {
                 canvasWidth = 1200;
@@ -236,7 +236,7 @@ const SnakeGame = () => {
             </div>
 
             {/* Buttons Container */}
-            <div className="flex justify-between w-full pt-4 space-x-4">
+            <div className="flex justify-between w-full pt-4 space-x-4 pb-8">
                 <Button
                     text={
                         <div className="flex items-center justify-center">

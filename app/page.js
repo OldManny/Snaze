@@ -8,11 +8,11 @@ import { MazeProvider } from '/components/Maze/MazeContext';
 
 const Home = () => {
     return (
-        <MazeProvider showModal={false}>
+        <MazeProvider showModal={false} loopFactor={0}>
             <Navbar />
             <div className="landing-page flex flex-col items-center justify-center flex-grow w-full h-full p-4 sm:p-6 lg:p-8 space-y-12">
                 {/* Header text section */}
-                <div className="header-text text-center pt-2 md:pt-12">
+                <div className="header-text text-center pt-2 md:pt-8 2xl:pt-12">
                     <h1 className="text-3xl md:text-5xl font-bold">Snaze</h1>
                 </div>
                 {/* Animated maze component */}
@@ -20,7 +20,7 @@ const Home = () => {
                     <AnimatedMaze />
                 </div>
                 {/* Animated text section */}
-                <div className="pb-12 md:pb-28 text-center">
+                <div className="pb-12 2xl:pb-28 text-center">
                     <TypingText text="Solve mazes and play snake using algorithms." speed={10} />
                 </div>
             </div>

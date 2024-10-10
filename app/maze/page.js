@@ -9,7 +9,7 @@ import InfoIcon from '@/components/Info';
 // Maze component that wraps all other components inside the MazeProvider
 const Maze = () => {
     return (
-        <MazeProvider showModal={true}>
+        <MazeProvider showModal={true} loopFactor={0.06}>
             {/* Outer wrapper with flex column and min-height to ensure full viewport height */}
             <div className="flex flex-col min-h-screen">
                 

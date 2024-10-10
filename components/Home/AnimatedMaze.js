@@ -33,9 +33,12 @@ const AnimatedMaze = ({ strokeWidth = 5 }) => {
         if (width < 720) {
             rows = 35;
             cols = 33;
-        } else {
+        } else if (width > 1700) {
             rows = 33;
             cols = 69;
+        } else {
+            rows = 35;
+            cols = 89;
         }
 
         // Set new dimensions and reset maze state

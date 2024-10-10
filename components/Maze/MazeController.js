@@ -88,7 +88,7 @@ const MazeController = () => {
     useEffect(() => {
         if (viewportSize.width !== null && viewportSize.height !== null) {
             const { rows, cols, cellSize } = getMazeDimensions(viewportSize.width, viewportSize.height);
-            generateMaze(rows, cols, cellSize); // Generate maze with calculated dimensions
+            generateMaze(rows, cols); // Generate maze with calculated dimensions and loops
         }
     }, [generateMaze, viewportSize]);
 
@@ -136,7 +136,7 @@ const MazeController = () => {
                     text="New Maze"
                     onClick={() => {
                         const { rows, cols, cellSize } = getMazeDimensions(viewportSize.width, viewportSize.height);
-                        generateMaze(rows, cols, cellSize); // Generate new maze on button click
+                        generateMaze(rows, cols); // Generate new maze on button click with loops
                     }}
                     className="bg-cyan-700 shadow-lg shadow-cyan-100/50 rounded-2xl hover:bg-cyan-800 px-4 py-2 flex-1 max-w-xs"
                 />

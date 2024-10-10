@@ -1,7 +1,9 @@
+// MazeInfo.js
+
 import React, { useEffect, useRef } from 'react';
 
 // MazeInfo component displays modal information about the current maze algorithm and steps
-const MazeInfo = ({ isOpen, onClose, steps, algorithm }) => {
+const MazeInfo = ({ isOpen, onClose, pathLength, nodesExplored, algorithm }) => {
     const modalRef = useRef(null); // Ref to detect clicks outside the modal
 
     // Helper function to format algorithm names for display
@@ -91,7 +93,8 @@ const MazeInfo = ({ isOpen, onClose, steps, algorithm }) => {
             <div ref={modalRef} className={`bg-indigo-100 p-4 sm:p-8 rounded-3xl shadow-xl max-w-full sm:max-w-4xl mx-auto transform transition-transform duration-500 ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}> {/* Modal content */}
                 <div className="text-slate-600 text-sm sm:text-base py-4"> {/* Text content inside modal */}
                     <p><strong>Algorithm:</strong> {formatAlgorithmName(algorithm)}</p>
-                    <p><strong>Steps:</strong> {steps}</p>
+                    <p><strong>Path Length:</strong> {pathLength}</p>
+                    <p><strong>Nodes Explored:</strong> {nodesExplored}</p>
                     <p><strong>Description:</strong> {getAlgorithmDescription(algorithm)}</p>
                     <p><strong>Analysis:</strong> {getComparativeAnalysis(algorithm)}</p>
                     <p><strong>Real-Life Applications:</strong> {getRealLifeApplications(algorithm)}</p>

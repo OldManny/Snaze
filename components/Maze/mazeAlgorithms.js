@@ -27,32 +27,43 @@ class PriorityQueue {
 export const bfsSolve = (maze, start, end) => {
     if (!start || !end) {
         console.error("Start or end point is missing.");
-        return [];
+        return { path: [], nodesExplored: 0 };
     }
 
     let queue = [{ pos: start, path: [start] }];
     let visited = new Set(`${start.row},${start.col}`);
+    let nodesExplored = 0; // Initialize nodes explored
 
     while (queue.length > 0) {
         let { pos, path } = queue.shift();
+        nodesExplored++; // Increment nodes explored for each node dequeued
+
         let { row, col } = pos;
 
         if (row === end.row && col === end.col) {
-            return path;
+            return { path, nodesExplored };
         }
 
         // Explore neighbors
         [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dRow, dCol]) => {
             let newRow = row + dRow, newCol = col + dCol;
-            if (newRow >= 0 && newRow < maze.length && newCol >= 0 && newCol < maze[0].length && maze[newRow][newCol] === 'P' && !visited.has(`${newRow},${newCol}`)) {
-                visited.add(`${newRow},${newCol}`);
+            let key = `${newRow},${newCol}`;
+            if (
+                newRow >= 0 &&
+                newRow < maze.length &&
+                newCol >= 0 &&
+                newCol < maze[0].length &&
+                maze[newRow][newCol] === 'P' &&
+                !visited.has(key)
+            ) {
+                visited.add(key);
                 queue.push({ pos: { row: newRow, col: newCol }, path: [...path, { row: newRow, col: newCol }] });
             }
         });
     }
 
     // If no path is found
-    return [];
+    return { path: [], nodesExplored };
 };
 
 /****************** DFS *********************/
@@ -61,12 +72,14 @@ export const bfsSolve = (maze, start, end) => {
 export const dfsSolve = (maze, start, end) => {
     let stack = [{ row: start.row, col: start.col, path: [start] }];
     let visited = new Set(`${start.row},${start.col}`);
+    let nodesExplored = 0; // Initialize nodes explored
 
     while (stack.length > 0) {
         const { row, col, path } = stack.pop();
+        nodesExplored++; // Increment nodes explored for each node popped
 
         if (row === end.row && col === end.col) {
-            return path;
+            return { path, nodesExplored };
         }
 
         // Explore neighbors
@@ -80,7 +93,7 @@ export const dfsSolve = (maze, start, end) => {
     }
 
     // If no path is found
-    return [];
+    return { path: [], nodesExplored };
 };
 
 /****************** A* *********************/
@@ -99,31 +112,33 @@ export const aStarSolve = (maze, start, end) => {
     let fScore = new Map();
     fScore.set(`${start.row},${start.col}`, heuristic(start, end));
     
+    let nodesExplored = 0; // Initialize nodes explored
+    
     while (!openSet.isEmpty()) {
         let current = openSet.dequeue();
+        nodesExplored++; // Increment nodes explored for each node dequeued
 
         if (current.row === end.row && current.col === end.col) {
-            return reconstructPath(cameFrom, start, end);
+            return { path: reconstructPath(cameFrom, start, end), nodesExplored };
         }
 
         // Explore neighbors
         [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dRow, dCol]) => {
             let neighbor = { row: current.row + dRow, col: current.col + dCol };
+            let neighborKey = `${neighbor.row},${neighbor.col}`;
 
             // Skip if neighbor is not valid or is a wall
             if (!isValidCell(maze, neighbor)) return;
 
             let tentativeGScore = gScore.get(`${current.row},${current.col}`) + 1; // Assume cost of 1 for each move
 
-            // In the A* implementation
-            if (tentativeGScore < (gScore.get(`${neighbor.row},${neighbor.col}`) || Infinity)) {
+            if (tentativeGScore < (gScore.get(neighborKey) || Infinity)) {
                 // This path to neighbor is better than any previous one. Record it!
-                cameFrom.set(`${neighbor.row},${neighbor.col}`, current);
-                gScore.set(`${neighbor.row},${neighbor.col}`, tentativeGScore);
-                fScore.set(`${neighbor.row},${neighbor.col}`, tentativeGScore + heuristic(neighbor, end));
-                openSet.enqueue(neighbor, fScore.get(`${neighbor.row},${neighbor.col}`));
+                cameFrom.set(neighborKey, current);
+                gScore.set(neighborKey, tentativeGScore);
+                fScore.set(neighborKey, tentativeGScore + heuristic(neighbor, end));
+                openSet.enqueue(neighbor, fScore.get(neighborKey));
             }
-
         });
     }
 
@@ -144,13 +159,14 @@ export const aStarSolve = (maze, start, end) => {
         while (current !== start) {
             path.unshift(current);
             current = cameFrom.get(`${current.row},${current.col}`);
+            if (!current) break; // Prevent infinite loop if no path exists
         }
         path.unshift(start); // Add the start position
         return path;
     }
 
     // If no path is found
-    return [];
+    return { path: [], nodesExplored };
 };
 
 /****************** Dijkstra's *********************/
@@ -167,10 +183,13 @@ export const dijkstraSolve = (maze, start, end) => {
     let keyEnd = `${end.row},${end.col}`;
     cameFrom[keyStart] = null;
     costSoFar[keyStart] = 0;
+
+    let nodesExplored = 0; // Initialize nodes explored
   
     while (!queue.isEmpty()) {
       let current = queue.dequeue();
       let keyCurrent = `${current.row},${current.col}`;
+      nodesExplored++; // Increment nodes explored for each node dequeued
   
       if (keyCurrent === keyEnd) {
         break;
@@ -193,29 +212,37 @@ export const dijkstraSolve = (maze, start, end) => {
     }
   
     // Reconstruct path from end to start
-    return reconstructPath(cameFrom, start, end);
-  };
+    const path = reconstructPath(cameFrom, start, end);
+    return { path, nodesExplored };
+};
   
-  // Helper to get valid neighbors of a cell
-  function getNeighbors(maze, { row, col }) {
+// Helper to get valid neighbors of a cell
+function getNeighbors(maze, { row, col }) {
     let neighbors = [];
     [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dRow, dCol]) => {
       let newRow = row + dRow, newCol = col + dCol;
-      if (newRow >= 0 && newRow < maze.length && newCol >= 0 && newCol < maze[0].length && maze[newRow][newCol] === 'P') {
-        neighbors.push({ row: newRow, col: newCol });
+      if (
+          newRow >= 0 &&
+          newRow < maze.length &&
+          newCol >= 0 &&
+          newCol < maze[0].length &&
+          maze[newRow][newCol] === 'P'
+      ) {
+          neighbors.push({ row: newRow, col: newCol });
       }
     });
     return neighbors;
-  }
-  
-  // Reconstruct path from the end to the start
-  function reconstructPath(cameFrom, start, end) {
+}
+
+// Reconstruct path from the end to the start
+function reconstructPath(cameFrom, start, end) {
     let current = end;
     let path = [];
     while (current !== start) {
       path.unshift(current);
       current = cameFrom[`${current.row},${current.col}`];
+      if (!current) break; // Prevent infinite loop if no path exists
     }
     path.unshift(start); // Add the start position to the path
     return path;
-  }
+}

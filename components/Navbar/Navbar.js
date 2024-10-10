@@ -97,7 +97,7 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div className="header w-full flex justify-between items-center px-6 py-4 md:py-6 md:px-9">
+        <div className="header w-full flex justify-between items-center px-6 py-4">
         {/* Logo/Home link */}
         <div className="text-xl font-bold">
             <Link href="/">

@@ -14,7 +14,7 @@ const MazeDisplay = ({ onCellClick, strokeWidth = 8, onAnimationEnd, cellSize = 
 
     // Effect to generate the maze with initial dimensions and cell size
     useEffect(() => {
-        generateMaze(23, 15, cellSize);
+        generateMaze(23, 15); // Updated to include loopFactor via MazeProvider
     }, [generateMaze, cellSize]);
 
     // Effect to update the current maze state with a delay
@@ -81,4 +81,3 @@ const MazeDisplay = ({ onCellClick, strokeWidth = 8, onAnimationEnd, cellSize = 
 };
 
 export default MazeDisplay;
-
