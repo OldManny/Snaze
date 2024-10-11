@@ -5,8 +5,8 @@ export const gameOverMessage = (score, totalMoves, coveragePercentage, aStarCoun
         <div>
             <p>Game Over! Your score is ${formatter.format(score)}.</p>
             <br>
-            <p><strong>• Total Moves Made:</strong> ${formatter.format(totalMoves)}.</p>
-            <p><strong>• Final Grid Coverage:</strong> ${coveragePercentage.toFixed(2)}%.</p>
+            <p><strong>• Moves Made:</strong> ${formatter.format(totalMoves)}.</p>
+            <p><strong>• Grid Coverage:</strong> ${coveragePercentage.toFixed(2)}%.</p>
             <br>
             <p>Algorithm Usage:</p>
             <ul>

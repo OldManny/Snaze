@@ -100,8 +100,3 @@ The application includes a fully autonomous, AI snake game that uses a combinati
 ![Snake Game](images/Snake.png)
 
 This implementation shows how pathfinding algorithms can be applied to create intelligent game behavior.
-
-
-## Bugs
-
-In rare cases, when the food is randomly placed in a corner, the snake may enter a continuous loop. While there are already measures in place to prevent this, the issue is extremely difficult to reproduce due to its infrequent occurrence.
