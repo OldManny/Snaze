@@ -1,10 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
 import SVGRenderer from './SVGRenderer'; 
-import SnakeAlgorithm from './SnakeAlgorithm'; 
+import SnakeAlgorithm, { algorithmUsage } from './SnakeAlgorithm'; 
 import WindowAlert from '../WindowAlert'; 
 import Button from '../Button';
 import { FaAngleDoubleRight, FaAngleDoubleLeft } from 'react-icons/fa'; 
+import { gameOverMessage } from './messages'; // Import the gameOverMessage function
 
 // Debounce function to limit the rate of function calls
 function debounce(fn, ms) {
@@ -32,12 +33,14 @@ const SnakeGame = () => {
     const [score, setScore] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
-    const [userMode, setUserMode] = useState(false);
     const [canvasSize, setCanvasSize] = useState({ width: 1200, height: 700 });
     const [currentStrokeWidth, setCurrentStrokeWidth] = useState(initialSnakeStrokeWidth);
     const [currentFoodSize, setCurrentFoodSize] = useState(initialFoodSize);
     const [speed, setSpeed] = useState(35); // Default speed
     const [speedLabel, setSpeedLabel] = useState('Faster'); // Default speed label
+
+    // New state variable for total moves
+    const [totalMoves, setTotalMoves] = useState(0);
 
     // Effect to update canvas size based on window dimensions
     useEffect(() => {
@@ -108,9 +111,10 @@ const SnakeGame = () => {
         setFood({ x: 15, y: 15 });
         setDirection('RIGHT');
         setGameOver(false);
-        setUserMode(false);
         setScore(0);
         setIsModalOpen(false);
+        setTotalMoves(0); // Reset total moves
+        algorithmUsage.resetCounts(); // Reset algorithm usage counts
     };
 
     // Handle changing the game speed
@@ -127,97 +131,39 @@ const SnakeGame = () => {
         }
     };
 
-    // Effect to handle user key presses for controlling the snake
-    useEffect(() => {
-        const handleKeyPress = (e) => {
-            if (userMode) {
-                switch (e.key) {
-                    case 'ArrowUp':
-                        if (direction !== 'DOWN') setDirection('UP');
-                        break;
-                    case 'ArrowDown':
-                        if (direction !== 'UP') setDirection('DOWN');
-                        break;
-                    case 'ArrowLeft':
-                        if (direction !== 'RIGHT') setDirection('LEFT');
-                        break;
-                    case 'ArrowRight':
-                        if (direction !== 'LEFT') setDirection('RIGHT');
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-        window.addEventListener('keydown', handleKeyPress);
-        return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [direction, userMode]);
-
     // Effect to update the snake's position at set intervals based on the game speed
     useEffect(() => {
         const interval = setInterval(() => {
             if (!gameOver) {
                 setSnake((prevSnake) => {
-                    if (!userMode) {
-                        return SnakeAlgorithm(prevSnake, direction, food, setFood, setGameOver, setScore);
-                    } else {
-                        const newSnake = [...prevSnake];
-                        const head = { ...newSnake[0] };
-                        switch (direction) {
-                            case 'UP':
-                                head.y -= 1;
-                                break;
-                            case 'DOWN':
-                                head.y += 1;
-                                break;
-                            case 'LEFT':
-                                head.x -= 1;
-                                break;
-                            case 'RIGHT':
-                                head.x += 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        if (head.x < 0 || head.x >= canvasSize.width / 20 || head.y < 0 || head.y >= canvasSize.height / 20) {
-                            setGameOver(true);
-                            setIsModalOpen(true);
-                            setModalMessage(`Game Over! Your score is ${score}.`);
-                            return prevSnake;
-                        }
-                        for (let segment of newSnake) {
-                            if (head.x === segment.x && head.y === segment.y) {
-                                setGameOver(true);
-                                setIsModalOpen(true);
-                                setModalMessage(`Game Over! Your score is ${score}.`);
-                                return prevSnake;
-                            }
-                        }
-                        newSnake.unshift(head);
-                        if (head.x === food.x && head.y === food.y) {
-                            setFood({
-                                x: Math.floor(Math.random() * (canvasSize.width / 20)),
-                                y: Math.floor(Math.random() * (canvasSize.height / 20)),
-                            });
-                            setScore(score + 1);
-                        } else {
-                            newSnake.pop();
-                        }
-                        return newSnake;
-                    }
+                    setTotalMoves(prevMoves => prevMoves + 1); // Increment total moves
+                    return SnakeAlgorithm(prevSnake, direction, food, setFood, setGameOver, setScore);
                 });
             }
         }, speed);
         return () => clearInterval(interval);
-    }, [snake, direction, food, gameOver, userMode, score, canvasSize, speed]);
+    }, [snake, direction, food, gameOver, score, canvasSize, speed]);
 
     // Effect to handle game over state
     useEffect(() => {
         if (gameOver) {
+            // Calculate final grid coverage percentage
+            const totalCells = 34 * 20; // Grid dimensions
+            const snakeLength = snake.length;
+            const coveragePercentage = (snakeLength / totalCells) * 100;
+
+            // Get algorithm usage counts
+            const aStarCount = algorithmUsage.getAStarCount();
+            const floodFillCount = algorithmUsage.getFloodFillCount();
+            const canReachTailCount = algorithmUsage.getCanReachTailCount();
+
+            // Build the modal message using gameOverMessage function
+            const message = gameOverMessage(score, totalMoves, coveragePercentage, aStarCount, floodFillCount, canReachTailCount);
+
             setIsModalOpen(true);
-            setModalMessage(`Game Over! Your score is ${score}.`);
+            setModalMessage(message);
         }
-    }, [gameOver, score, modalMessage]);
+    }, [gameOver, score, snake, totalMoves]);
 
     // Render the SnakeGame component
     return (

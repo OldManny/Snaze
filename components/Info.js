@@ -40,18 +40,19 @@ const InfoIcon = ({ color = "text-blue-500", messageType }) => {
         `,
         snake: `
             <div>
-                <p>The Snake game is fully autonomous and utilises a combination of technologies to enhance its performance:</p>
+                <p>The AI Snake game is fully autonomous and utilises a combination of technologies to enhance its performance:</p>
                 <br>
                 <ul class="list-disc pl-5">
                     <li><strong>A* Pathfinding Algorithm:</strong> The snake uses the A* algorithm to determine the shortest and safest path to the food. This ensures efficient navigation by evaluating potential paths and selecting the best one.</li>
                     <li><strong>Grid System:</strong> The game operates on a grid system, allowing precise movement and collision detection for the snake.</li>
                     <li><strong>Heuristic Function:</strong> Integral to the A* algorithm, the heuristic function estimates the cost of reaching the food, aiding in the selection of the optimal path.</li>
                     <li><strong>Flood Fill Algorithm:</strong> Used to assess the available space around the snake, this algorithm ensures safe movement by avoiding collisions with the snake's own body.</li>
+                    <li><strong>Breadth-First Search (BFS):</strong> The snake employs BFS to check if it can reach its tail after making a move. This prevents the snake from getting trapped easily.</li>
                     <li><strong>Optimised Move Selection:</strong> Advanced techniques such as lookahead, escape moves, and backtracking are used to determine the best possible move.</li>
                 </ul>
             </div>
         `
-    };
+        };
 
     // Get the message
     const infoMessage = messages[messageType];

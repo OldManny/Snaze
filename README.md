@@ -11,6 +11,7 @@
 - [Maze Generation and Solving](#maze-generation-and-solving)
 - [Algorithms](#algorithms)
 - [Snake Game](#snake-game)
+- [Bugs](#bugs)
 
 
 ## Introduction
@@ -28,7 +29,7 @@ This React-based web application is an interactive platform for visualizing maze
   - Dijkstra's Algorithm
 - Interactive visualization of algorithm execution
 - User-selectable start and end points
-- AI-powered snake game with performance enhancements
+- AI-powered snake game
 
 ![Maze Solved](images/MazeSolved.png)
 
@@ -71,7 +72,7 @@ This React-based web application is an interactive platform for visualizing maze
 ## Algorithms
 
 ### Maze Generation
-- **Recursive Backtracking with Loop Addition**:  Creates random mazes by carving paths and backtracking when no valid moves are available. Additional loops are introduced by removing a specified number of walls based on the loop factor (set to 6% by default), allowing for multiple solution paths.
+- **Recursive Backtracking with Loop Addition**:  Creates random mazes by carving paths and backtracking when no valid moves are available. Additional loops are introduced by removing a specified number of walls based on the loop factor (set to 3% by default), allowing for multiple solution paths.
 
 - The loop factor was introduced to offer a better contrast between the performance of the algorithms. This contrast becomes more evident when there are multiple paths to a solution, providing better insights compared to mazes with a unique one.
 
@@ -93,8 +94,14 @@ The application includes a fully autonomous, AI snake game that uses a combinati
 - **Grid System**: Enables precise movement and collision detection.
 - **Heuristic Function**: Estimates the cost of reaching the food, aiding in optimal path selection.
 - **Flood Fill Algorithm**: Assesses available space to avoid collisions with the snake's body.
+- **Breadth-First Search (BFS)**: Utilized in the "canReachTail" function to ensure the snake can reach its tail after making a move, preventing it from trapping itself.
 - **Optimized Move Selection**: Utilizes techniques like lookahead, escape moves, and backtracking for best possible moves.
 
 ![Snake Game](images/Snake.png)
 
-This implementation showcases how pathfinding algorithms can be applied to create intelligent game behavior.
+This implementation shows how pathfinding algorithms can be applied to create intelligent game behavior.
+
+
+## Bugs
+
+In rare cases, when the food is randomly placed in a corner, the snake may enter a continuous loop. While there are already measures in place to prevent this, the issue is extremely difficult to reproduce due to its infrequent occurrence.

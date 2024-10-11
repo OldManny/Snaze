@@ -1,4 +1,4 @@
-// SVGRenderer component to render the snake and food in the game
+// SVGRenderer component to render the snake
 const SVGRenderer = ({ snake, food, width, height, cellColor, snakeStrokeWidth, foodSize }) => {
     // Calculate the cell size based on the width and height of the SVG container
     const cellSize = Math.min(width / 34, height / 20);
