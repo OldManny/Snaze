@@ -1,5 +1,3 @@
-// MazeContext.js
-
 'use client';
 import React, { createContext, useState, useContext, useCallback, useEffect } from 'react';
 import { bfsSolve, dijkstraSolve, aStarSolve, dfsSolve } from './mazeAlgorithms';

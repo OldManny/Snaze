@@ -63,14 +63,14 @@ const SnakeGame = () => {
             else if (width < 930) {
                 canvasWidth = 720;
                 canvasHeight = 400;
-                strokeWidth = initialSnakeStrokeWidth;
-                foodSize = initialFoodSize;
+                strokeWidth = initialSnakeStrokeWidth / 1.5;
+                foodSize = initialFoodSize / 1.5;
             }
             else if (width < 1024) {
                 canvasWidth = 840;
                 canvasHeight = 400;
-                strokeWidth = initialSnakeStrokeWidth;
-                foodSize = initialFoodSize;
+                strokeWidth = initialSnakeStrokeWidth / 1.5;
+                foodSize = initialFoodSize / 1.5;
             }
             else if (width < 1625) {
                 canvasWidth = 1025;

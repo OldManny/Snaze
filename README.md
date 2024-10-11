@@ -20,7 +20,7 @@ This React-based web application is an interactive platform for visualizing maze
 
 ## Features
 
-- Automatic maze generation using Recursive Backtracking algorithm
+- Automatic maze generation using Recursive Backtracking algorithm with an adjustable loop factor to create imperfect mazes.
 - Multiple maze-solving algorithms:
   - Breadth-First Search (BFS)
   - Depth-First Search (DFS)
@@ -71,7 +71,9 @@ This React-based web application is an interactive platform for visualizing maze
 ## Algorithms
 
 ### Maze Generation
-- **Recursive Backtracking**: Creates random mazes by carving paths and backtracking when no valid moves are available.
+- **Recursive Backtracking with Loop Addition**:  Creates random mazes by carving paths and backtracking when no valid moves are available. Additional loops are introduced by removing a specified number of walls based on the loop factor (set to 6% by default), allowing for multiple solution paths.
+
+The loop factor was introduced to offer a better contrast between the performance of the algorithms. This contrast becomes more evident when there are multiple paths to a solution, providing deeper insights compared to mazes with a unique one.
 
 ### Maze Solving
 1. **Breadth-First Search (BFS)**: Explores all neighbor nodes at the present depth before moving to nodes at the next depth level.

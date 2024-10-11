@@ -1,5 +1,3 @@
-// MazeInfo.js
-
 import React, { useEffect, useRef } from 'react';
 
 // MazeInfo component displays modal information about the current maze algorithm and steps
