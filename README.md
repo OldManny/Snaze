@@ -1,4 +1,4 @@
-# Snaze
+<h1 align="center">Snaze</h1>
 
 ![Home Page](images/HomePage.png)
 
